@@ -14,7 +14,28 @@ def changeSection(userid,passwd,coursecode,changeSection):
         "submitChangeSection": "Change Section",
         "selectAddCourseCategory": "1",
         }
-    
+    check=1
+
+    with requests.Session() as s:
+
+        r=s.get(url,headers=headers)
+        soup=BeautifulSoup(r.content,'html.parser')
+        logData['hidden_redir']=soup.find("input",attrs={"name":"hidden_redir"})['value']
+        logData['hidden_form_id']=soup.find("input",attrs={"name":"hidden_form_id"})['value']
+        r=s.post(url+"main.php",data=logData,headers=headers)
+        soup=BeautifulSoup(r.content,'html.parser')
+        log2Data['hidden_redir']=soup.find("input",attrs={"name":"hidden_redir"})['value']
+        log2Data['hidden_form_id']=soup.find("input",attrs={"name":"hidden_form_id"})['value']
+        a=r.text
+        ind=a.find(coursecode)
+        typefi=a.find('"',ind)
+        rad=a[ind:typefi]
+        log2Data["radio_courseList"]= rad
+        while check>0:
+            r=s.post(url+"main.php",data=log2Data,headers=headers)
+            a=r.text
+            check=a.find("font color=")
+        print('Course Added')
 
 if __name__=='__main__':
     userid=''
