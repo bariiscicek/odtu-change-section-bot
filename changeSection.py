@@ -4,6 +4,7 @@ from datetime import datetime
 import smtplib
 
 
+
 def changeSection(userid,passwd,coursecode,changeSection):
     url="https://register.metu.edu.tr/"
     logData={"textUserCode":userid,"textPassword":passwd,"selectProgType": "1","submitLogin": "Login"}
